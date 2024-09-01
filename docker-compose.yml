@@ -1,0 +1,20 @@
+services:
+  hello-world:
+    image: python:3.9-slim
+    command: python -m http.server 2358
+    volumes:
+      - ./index.html:/usr/src/app/index.html
+    working_dir: /usr/src/app
+    expose:
+      - "2358"
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      - hello-world
+
